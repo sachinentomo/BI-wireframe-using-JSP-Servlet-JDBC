@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@page import="java.util.ArrayList"%>    
+<%@ page isELIgnored = "false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,9 +21,9 @@
 					            aria-label="Search">
 					    </form>
 					</div>
-	
+			
 					<div class="col-lg-2">
-					    <button href="#addEmployeeModal" class="btn btn-primary btn-sm" data-toggle="modal">Add New Employee</button>
+					    <button class="btn btn-primary btn-sm add-employee" data-modal="employee-modal">Add New Employee</button>
 					</div>
 					<div class="col-lg-12 my-4">
 					    <table id="example" class="table table-hover " style="width:100%">
@@ -34,55 +35,34 @@
 					            </tr>
 					        </thead>
 					        <tbody>
-					            <!-- <tr>
-					                <td>1</td>
-					                <td>SACHIN M</td>
-					                <td>
-					                    <a role="button" class="btn btn-link">
-					                        <i class="fas fa-eye text-dark"></i>
-					                    </a>
-					
-					                    <a href="#editEmployeeModal" data-toggle="modal" role="button" class="btn btn-link">
-					                        <i class="fas fa-pencil-alt text-warning"></i>
-					                    </a>
-					                    <a href="#deleteEmployeeModal" data-toggle="modal" role="button" class="btn btn-link">
-					                        <i class="fas fa-trash text-danger"></i>
-					                    </a>
-					                </td>
-					            </tr>
-					            <tr>
-					                <td>2</td>
-					                <td>ADITYA N</td>
-					                <td>
-					                    <button role="button" class="btn btn-link">
+					        	<c:forEach var="emp" items="${empList}" varStatus="theCount">   
+								   <tr>  
+								   	<td>${theCount.count}</td>  
+								   	<td>${emp.emp_name}</td> 
+								   	<td data-emp_id="${emp.emp_id}"
+											data-emp_code="${emp.emp_code}" 
+											data-emp_name="${emp.emp_name}"
+											data-emp_email="${emp.emp_email}"
+											data-emp_username="${emp.emp_username}" 
+											data-emp_pass="${emp.emp_pass}"
+											data-emp_dept="${emp.emp_dept}"
+											data-emp_prj="${emp.emp_prj}"
+											data-emp_join="${emp.emp_join}"
+											data-is_active="${emp.is_active}"
+											>
+					                    <button role="button" class="btn btn-link view-employee" data-modal="employee-modal">
 					                        <i class="fas fa-eye text-dark"></i>
 					                    </button>
 					
-					                    <button role="button" class="btn btn-link">
+					                    <button role="button" class="btn btn-link edit-employee">
 					                        <i class="fas fa-pencil-alt text-warning"></i>
 					                    </button>
-					                    <button role="button" class="btn btn-link">
+					                    <button role="button" class="btn btn-link delete-employee">
 					                        <i class="fas fa-trash text-danger"></i>
 					                    </button>
-					                </td>
-					            </tr>
-					            <tr>
-					                <td>3</td>
-					                <td>IDRIS</td>
-					                <td>
-					                    <button role="button" class="btn btn-link">
-					                        <i class="fas fa-eye text-dark"></i>
-					                    </button>
-					
-					                    <button role="button" class="btn btn-link">
-					                        <i class="fas fa-pencil-alt text-warning"></i>
-					                    </button>
-					                    <button role="button" class="btn btn-link">
-					                        <i class="fas fa-trash text-danger"></i>
-					                    </button>
-					                </td>
-					            </tr> -->
-				
+					                </td>   
+								   </tr>  
+								</c:forEach>  				
 					        </tbody>
 					        <tfoot>
 					            <tr>
@@ -97,73 +77,89 @@
            </div>
           </div>
          </div>
-         
-         
-          
-         <div id="addEmployeeModal" class="modal fade">
+                   
+         <div id="employee-modal" class="modal fade">
     		<div class="modal-dialog">
       			<div class="modal-content">
-        			<form>
+        			<form id="employee-form">
           				<div class="modal-header">
-            				<h4 class="modal-title">Add Employee</h4>
-            				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            				<h4 class="modal-title" id="modal-title">Add Employee</h4>
+            				<button type="button" id="old" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           				</div>
           				
           				<div class="modal-body">
-          				
-            				<div class="form-group">
-              					<label>Name</label>
-              					<input type="text" class="form-control" required>
+          					<div class='error-msg' id='validationSummary'></div>
+          					<div  id="confirm-msg"></div>
+          					<div class="form-group" style="display:none">
+              					<label>lastname</label>
+              					<input type="text" class="form-control" name="last_name" id="employee-lastname" required>
             				</div>
             				
-            				<div class="form-group">
+            				<div class="form-group" id="div1">
+              					<label>Name</label>
+              					<input type="text" class="form-control" name="emp_name" id="employee-name" required>
+            				</div>
+            						
+            				<div class="form-group" id="div2">
               					<label>Email</label>
-              					<input type="email" class="form-control" required>
+              					<input type="email" class="form-control" name="emp_email" id="employee-email" required>
+            				</div>
+            				
+            				<div class="form-group" id="div3">
+              					<label>UserName</label>
+              					<input type="text" class="form-control" name="emp_username" id="employee-username" required>
             				</div>
 			
-							<div class="form-group">
+							<div class="form-group" id="div4">
               					<label>Password</label>
-              					<input type="password" class="form-control" required>
+              					<input type="password" class="form-control" name="emp_pass"  id="employee-password" required>
             				</div>
 
-							<div class="form-group">
+							<div class="form-group" id="div5">
               					<label>Department</label>
-              					<select class="custom-select">
-								  <option selected>Open this select menu</option>
-								  <option value="1">One</option>
-								  <option value="2">Two</option>
-								  <option value="3">Three</option>
+              					<select class="custom-select" name="emp_dept" id="employee-department">
+              						<option selected value="">Select Department</option>
+              					<c:forEach var="dept" items="${deptList}">
+								  	<option value="${dept.dept_id}">${dept.dept_name}</option>
+								</c:forEach>
 								</select>
             				</div>
             				
-            				<div class="form-group">
+            				<div class="form-group" id="div6">
               					<label>Project</label>
-              					<select class="custom-select">
-								  <option selected>Open this select menu</option>
-								  <option value="1">One</option>
-								  <option value="2">Two</option>
-								  <option value="3">Three</option>
+              					<select class="custom-select" name="emp_prj" id="employee-project" >
+									<option selected value="">Select Project</option>
+								<c:forEach var="prj" items="${prjList}">
+								  	<option value="${prj.prj_id}">${prj.prj_name}</option>
+								</c:forEach>
 								</select>
             				</div>
             				
-           				 	
-           				 	
-            				<div class="form-group">
-								<div class="form-group pmd-textfield pmd-textfield-floating-label">
-									<label class="control-label" for="datetimepicker-default">Select Date and Time</label>
-									<input type="text" id="datetimepicker-default" class="form-control" />
-								</div>
-            				</div>
+            				<div class="form-group" id="div7" style="display:none">
+							     <label><b>Status</b></label>
+							     <div class="radio">
+							        <input id="active" class="status" type="radio" value="true" name="status">
+							        <label for="active"><b>Active</b> </label>
+							        <input id="inactive" class="status" type="radio" value="false" name="status">
+							        <label for="inactive"><b>Inactive </b></label>
+							     </div>
+							</div>
+            
           				</div>
           				
           				<div class="modal-footer">
-            				<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-            				<input type="submit" class="btn btn-success" value="Add">
+          					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+            				<input type="button" class="btn btn-success" value="Add" id="save">
+          					<input type="hidden" name="emp_id" id="employee-id" >
+          					<input type="hidden" name="emp_code" id="employee-code" >
+          					<input type="hidden" name="action"  id="update-action"/>
           				</div>
+          				
         			</form>
       			</div>
     		</div>
-  	</div>             
-	
-</body>
+  	     </div>
+  	    <script src="${pageContext.request.contextPath}/resources/javascript/index.js"></script>
+  	     <script src="${pageContext.request.contextPath}/resources/javascript/employee.js"></script>
+  </body>
 </html>
