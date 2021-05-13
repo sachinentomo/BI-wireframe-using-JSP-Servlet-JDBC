@@ -63,7 +63,7 @@ public class CustomeSearchDao {
 				System.out.println(query);
 			}
 			
-			if(search.getDate_from() != null)
+			if(search.getDate_from() != "" && search.getDate_to() != null)
 			{
 //				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //				Date date_from1 = null;
@@ -72,14 +72,16 @@ public class CustomeSearchDao {
 				query = query + " and e.emp_join >= '"+ search.getDate_from() +"' "; 
 				System.out.println(query);
 			}
-			
-			if(search.getDate_to() != null)
+			String date_to = search.getDate_to().replace("\"", "");
+
+			if(date_to != "" && date_to != null)
 			{
 //				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //				Date date_from1 = null;
 //				date_from1 = sdf.parse(search.getDate_from());
-				System.out.println("Inseide customeSearch" + search.getDate_to());
-				query = query + " and e.emp_join <= '"+ search.getDate_to() + "'"; 
+				System.out.println("Printing the date:" + date_to);
+				System.out.println("Inseide customeSearch" + date_to);
+				query = query + " and e.emp_join <= '"+ date_to + "'"; 
 				System.out.println(query);
 			}
 			
